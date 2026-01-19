@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alabama Spring Classic 2026</title>
+    <meta name="description" content="Official Itinerary for the 2026 Alabama Golf Trip - Prattville & The RTJ Trail.">
+    
+    <!-- Icons from Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            /* Color Palette */
+            --primary: #1e4d2b; /* Deep Golf Green */
+            --primary-light: #2c6e3d;
+            --accent: #d4af37; /* Trophy Gold */
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #6c757d;
+            
+            /* Spacing & Layout */
+            --container-width: 1000px;
+            --radius: 12px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* HEADER SECTION */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 5rem 1rem 3rem;
+            text-align: center;
+        }
+        
+        .header-content {
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .trip-subtitle {
+            font-size: 1.25rem;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+        }
+
+        /* NAVIGATION */
+        .nav-container {
+            background: var(--white);
+            max-width: var(--container-width);
+            margin: -30px auto 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-item {
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-item:hover {
+            background-color: #f1f3f5;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .nav-item i { width: 20px; height: 20px; }
+
+        /* CONTENT SECTIONS */
+        .main-container {
+            max-width: var(--container-width);
+            margin: 0 auto 50px;
+            padding: 0 1rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* MAP STYLING */
+        .interactive-map {
+            width: 100%;
+            height: 350px;
+            background: #e9ecef;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+
+        .map-bg { fill: #e9ecef; }
+        .map-path { stroke: #adb5bd; stroke-width: 3; stroke-dasharray: 6; fill: none; opacity: 0.5; transition: all 0.3s; }
+        .map-path.active { stroke: var(--primary); opacity: 1; stroke-width: 4; stroke-dasharray: 0; }
+        
+        .map-node { fill: var(--white); stroke: var(--primary); stroke-width: 3; r: 6; cursor: pointer; transition: all 0.3s; }
+        .map-node:hover { fill: var(--accent); r: 8; }
+        .map-node.hub { fill: var(--primary); stroke: var(--accent); r: 10; }
+        
+        .map-label { font-size: 11px; font-weight: 700; fill: #495057; pointer-events: none; text-transform: uppercase; }
+        .map-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            transform: translate(-50%, -150%);
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+        .timeline-day {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .timeline-day h3 {
+            background: var(--primary);
+            color: var(--white);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .event {
+            display: flex;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 2px solid #e9ecef;
+            position: relative;
+        }
+        .event::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            left: -6px;
+            top: 6px;
+        }
+        .event-time {
+            min-width: 80px;
+            font-weight: 700;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        .event-detail h4 { margin-bottom: 5px; color: var(--dark); }
+        .event-detail p { font-size: 0.95rem; color: #555; margin-bottom: 5px; }
+        .btn-link {
+            color: var(--primary);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-link:hover { text-decoration: underline; color: var(--primary-light); }
+
+        /* LODGING GRID */
+        .lodging-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box strong { display: block; margin-bottom: 5px; color: var(--dark); }
+
+        /* COURSE CARDS */
+        .course-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .course-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .course-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .course-body { padding: 20px; }
+        .course-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* COSTS TABLE */
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .cost-table th { text-align: left; background: #f1f3f5; padding: 12px; color: var(--gray); font-size: 0.9rem; }
+        .cost-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .cost-table tr:last-child td { font-weight: 800; font-size: 1.1rem; color: var(--primary); border-top: 2px solid var(--dark); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-container { grid-template-columns: repeat(2, 1fr); }
+            .lodging-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <h1>Alabama Spring Classic</h1>
+        <div class="trip-subtitle">April 2 – 5, 2026 | The Birthday Edition</div>
+    </div>
+</header>
+
+<div class="nav-container">
+    <div class="nav-item active" onclick="switchTab('itinerary')">
+        <i data-lucide="calendar"></i>
+        <span>Itinerary</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('lodging')">
+        <i data-lucide="home"></i>
+        <span>Lodging & Van</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('courses')">
+        <i data-lucide="flag-triangle-right"></i>
+        <span>The Courses</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('costs')">
+        <i data-lucide="wallet"></i>
+        <span>Costs</span>
+    </div>
+</div>
+
+<div class="main-container">
+
+    <!-- ITINERARY TAB -->
+    <div id="itinerary" class="section active">
+        
+        <!-- Interactive Map Visual -->
+        <div class="interactive-map">
+            <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%;">
+                <!-- Background (Abstract Alabama shape could go here) -->
+                
+                <!-- Paths -->
+                <!-- BHM to Prattville -->
+                <path d="M400,50 L400,200" class="map-path" id="path-arrival"></path>
+                <!-- Prattville to Cambrian -->
+                <path d="M400,200 L400,350" class="map-path" id="path-cambrian"></path>
+                <!-- Prattville to Ross Bridge -->
+                <path d="M400,200 L380,100" class="map-path" id="path-ross"></path>
+                
+                <!-- Locations -->
+                <circle cx="400" cy="50" class="map-node" data-tooltip="BHM Airport & Oxmoor Valley"></circle>
+                <text x="415" y="55" class="map-label">BHM / OXMOOR</text>
+
+                <circle cx="380" cy="100" class="map-node" data-tooltip="Ross Bridge (Sat)"></circle>
+                <text x="290" y="105" class="map-label">ROSS BRIDGE</text>
+
+                <circle cx="400" cy="200" class="map-node hub" data-tooltip="The House (Prattville)"></circle>
+                <text x="420" y="205" class="map-label">THE HOUSE</text>
+
+                <circle cx="400" cy="350" class="map-node" data-tooltip="Cambrian Ridge (Fri)"></circle>
+                <text x="415" y="355" class="map-label">CAMBRIAN RIDGE</text>
+            </svg>
+            <div id="map-tooltip" class="map-tooltip"></div>
+        </div>
+
+        <div class="card">
+            <h2><i data-lucide="map"></i> The Schedule</h2>
+            
+            <div class="timeline">
+                
+                <!-- THURSDAY -->
+                <div class="timeline-day">
+                    <h3>Thursday, April 2 | Arrival</h3>
+                    <div class="event">
+                        <div class="event-time">11:00 AM</div>
+                        <div class="event-detail">
+                            <h4>Land at BHM Airport</h4>
+                            <p>Pick up 12-Passenger Ford Transit Van. Clubs go in the back.</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">12:30 PM</div>
+                        <div class="event-detail">
+                            <h4>Golf: Oxmoor Valley (Ridge Course)</h4>
+                            <p>15 min drive from airport. The "Warmup" round with massive elevation drops.</p>
+                            <a href="https://www.rtjgolf.com/oxmoorvalley/" target="_blank" class="btn-link">View Course <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">5:30 PM</div>
+                        <div class="event-detail">
+                            <h4>Drive to Prattville (Hub)</h4>
+                            <p>Approx 1 hr 15 min drive south to the house.</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">7:30 PM</div>
+                        <div class="event-detail">
+                            <h4>Dinner: Fat Boy's BBQ</h4>
+                            <p>Local legend. Styrofoam plates, incredible ribs. Casual start.</p>
+                            <a href="https://www.fatboysbbqranch.com/" target="_blank" class="btn-link">Menu <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRIDAY -->
+                <div class="timeline-day">
+                    <h3>Friday, April 3 | The 27-Hole Gauntlet</h3>
+                    <div class="event">
+                        <div class="event-time">7:15 AM</div>
+                        <div class="event-detail">
+                            <h4>Depart for Greenville</h4>
+                            <p>45 min drive South down I-65.</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">8:30 AM</div>
+                        <div class="event-detail">
+                            <h4>Golf: Cambrian Ridge (27 Holes)</h4>
+                            <p>We play the Canyon, Sherling, AND Loblolly nines. Most scenic value on the trail.</p>
+                            <a href="https://www.rtjgolf.com/cambrianridge/" target="_blank" class="btn-link">View Course <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">EVENING</div>
+                        <div class="event-detail">
+                            <h4>House Hangout</h4>
+                            <p>Pizza, Poker, and Drinks at the Airbnb. Rest up for the big day.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SATURDAY -->
+                <div class="timeline-day">
+                    <h3>Saturday, April 4 | The Birthday Celebration</h3>
+                    <div class="event">
+                        <div class="event-time">9:00 AM</div>
+                        <div class="event-detail">
+                            <h4>Depart for Ross Bridge</h4>
+                            <p>Sleep in slightly. 1 hr 10 min drive North.</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">11:00 AM</div>
+                        <div class="event-detail">
+                            <h4>Golf: Ross Bridge (The Major)</h4>
+                            <p>18 Holes. Forecaddies included. The "Pebble Beach" of Alabama.</p>
+                            <a href="https://www.rtjgolf.com/rossbridge/" target="_blank" class="btn-link">View Course <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">4:30 PM</div>
+                        <div class="event-detail">
+                            <h4>Sunset Drinks</h4>
+                            <p>Watch the Bagpiper close down the course from the patio.</p>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">8:00 PM</div>
+                        <div class="event-detail">
+                            <h4>Birthday Dinner: Central / Ravello</h4>
+                            <p>Upscale dinner in "The Alley" (Downtown Montgomery).</p>
+                            <a href="https://central129coosa.com/" target="_blank" class="btn-link">Central Website <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUNDAY -->
+                <div class="timeline-day">
+                    <h3>Sunday, April 5 | The Finale</h3>
+                    <div class="event">
+                        <div class="event-time">8:00 AM</div>
+                        <div class="event-detail">
+                            <h4>Golf: The Senator (Capitol Hill)</h4>
+                            <p>Scottish Links style. 5 mins from the house.</p>
+                            <a href="https://www.rtjgolf.com/capitolhill/" target="_blank" class="btn-link">View Course <i data-lucide="external-link" size="14"></i></a>
+                        </div>
+                    </div>
+                    <div class="event">
+                        <div class="event-time">2:00 PM</div>
+                        <div class="event-detail">
+                            <h4>Depart BHM</h4>
+                            <p>Flights home.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- LODGING TAB -->
+    <div id="lodging" class="section">
+        <div class="card">
+            <h2><i data-lucide="home"></i> Home Base: "Magnolia Retreat"</h2>
+            <p>We are staying in a dedicated group house in Prattville. This keeps us central to all courses and allows for a "Hub & Spoke" travel model.</p>
+            <br>
+            <div class="lodging-grid">
+                <div class="info-box">
+                    <strong>📍 The House</strong>
+                    <p>Prattville, AL (Address provided 24h prior)</p>
+                    <p>4 Bedrooms / 3 Baths</p>
+                    <p><em>Everyone gets a real bed.</em></p>
+                    <br>
+                    <a href="https://www.airbnb.com/rooms/1581396706282680956" target="_blank" class="btn-link">View Listing on Airbnb <i data-lucide="external-link" size="14"></i></a>
+                </div>
+                <div class="info-box">
+                    <strong>🚐 The Van</strong>
+                    <p><strong>Vehicle:</strong> 12-Passenger Ford Transit</p>
+                    <p><strong>Pickup:</strong> BHM Airport (Thu 11 AM)</p>
+                    <p><strong>Dropoff:</strong> BHM Airport (Sun 1:30 PM)</p>
+                    <p><em>Plenty of room for 6 travel bags + clubs.</em></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i data-lucide="check-square"></i> Packing List</h2>
+            <ul style="padding-left: 20px; line-height: 2;">
+                <li><strong>Rain Gear:</strong> April showers are real. Bring jacket + pants.</li>
+                <li><strong>Socks:</strong> Bring 2 pairs per day (36-hole days = fresh socks).</li>
+                <li><strong>Warm Layer:</strong> Mornings will be 55°F, warming to 75°F.</li>
+                <li><strong>Cash:</strong> For Caddie tips ($30-40) and betting.</li>
+                <li><strong>Advil:</strong> For the 27-hole hangover.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- COURSES TAB -->
+    <div id="courses" class="section">
+        
+        <div class="course-card">
+            <div class="course-header">
+                <h3>Oxmoor Valley (Ridge)</h3>
+                <span>Thursday</span>
+            </div>
+            <div class="course-body">
+                <p>One of the most photographed courses on the Trail. Huge elevation changes, rock outcroppings, and roller coaster fairways.</p>
+                <div class="course-stats">
+                    <span><i data-lucide="map-pin" size="14"></i> Birmingham</span>
+                    <span><i data-lucide="ruler" size="14"></i> Par 72</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-header">
+                <h3>Cambrian Ridge (27 Holes)</h3>
+                <span>Friday</span>
+            </div>
+            <div class="course-body">
+                <p><strong>The Adventure.</strong> We play Canyon, Sherling, and Loblolly. Known as the best value on the trail, it features massive drops and lake views.</p>
+                <div class="course-stats">
+                    <span><i data-lucide="map-pin" size="14"></i> Greenville</span>
+                    <span><i data-lucide="ruler" size="14"></i> 27 Holes</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-header">
+                <h3>Ross Bridge</h3>
+                <span>Saturday (Birthday Round)</span>
+            </div>
+            <div class="course-body">
+                <p><strong>The Crown Jewel.</strong> One of the longest courses in the world (8,191 yards from tips). Park-like setting, waterfalls connecting lakes, and forecaddie service.</p>
+                <div class="course-stats">
+                    <span><i data-lucide="map-pin" size="14"></i> Hoover</span>
+                    <span><i data-lucide="user" size="14"></i> Caddies Inc.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-header">
+                <h3>Capitol Hill (The Senator)</h3>
+                <span>Sunday</span>
+            </div>
+            <div class="course-body">
+                <p><strong>Scottish Links.</strong> A total change of pace. 160+ pot bunkers, huge dunes, and zero trees. Plays fast and firm.</p>
+                <div class="course-stats">
+                    <span><i data-lucide="map-pin" size="14"></i> Prattville</span>
+                    <span><i data-lucide="ruler" size="14"></i> Par 72</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- COSTS TAB -->
+    <div id="costs" class="section">
+        <div class="card">
+            <h2><i data-lucide="wallet"></i> Estimated Breakdown</h2>
+            <p>Based on 6 attendees. Costs are estimates and will be collected via Splitwise/Venmo.</p>
+            
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cost (Est.)</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Flights (Avg)</td>
+                        <td>$450</td>
+                        <td>Book individually to BHM</td>
+                    </tr>
+                    <tr>
+                        <td>Airbnb Share</td>
+                        <td>$350</td>
+                        <td>3 Nights (Total Booking: ~$2,100)</td>
+                    </tr>
+                    <tr>
+                        <td>Golf (All Rounds)</td>
+                        <td>$620</td>
+                        <td>Includes Ross Bridge Caddie Tip</td>
+                    </tr>
+                    <tr>
+                        <td>Van Rental + Gas</td>
+                        <td>$180</td>
+                        <td>Split 6 ways</td>
+                    </tr>
+                    <tr>
+                        <td>Food & Drinks</td>
+                        <td>$450</td>
+                        <td>Birthday Dinner, Groceries, Booze</td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL PER PERSON</td>
+                        <td>$2,050</td>
+                        <td>ALL-IN</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 20px; background: #fff3cd; padding: 15px; border-radius: 8px;">
+                <strong>⚠️ Action Items:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Book Flights to arrive BHM by 11:00 AM on April 2.</li>
+                    <li>Venmo [Name] $350 for Airbnb Deposit by Feb 1.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Tab Switching Logic
+    function switchTab(tabId) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        // Show target section
+        document.getElementById(tabId).classList.add('active');
+        
+        // Update Nav State
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        // Find the nav item that calls this function (rough match)
+        const navItems = Array.from(document.querySelectorAll('.nav-item'));
+        const activeNav = navItems.find(item => item.getAttribute('onclick').includes(tabId));
+        if(activeNav) activeNav.classList.add('active');
+    }
+
+    // Simple Map Interaction (Hover effects)
+    const mapNodes = document.querySelectorAll('.map-node');
+    const tooltip = document.getElementById('map-tooltip');
+
+    mapNodes.forEach(node => {
+        node.addEventListener('mouseenter', (e) => {
+            const text = node.getAttribute('data-tooltip');
+            tooltip.innerText = text;
+            tooltip.style.opacity = '1';
+            tooltip.style.left = e.target.cx.baseVal.value + 'px';
+            tooltip.style.top = (e.target.cy.baseVal.value - 10) + 'px';
+        });
+        
+        node.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+        });
+    });
+</script>
+
+</body>
+</html>
